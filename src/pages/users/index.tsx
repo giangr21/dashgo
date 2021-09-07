@@ -1,7 +1,7 @@
 import {
-  Heading,
   Box,
   Flex,
+  Heading,
   Button,
   Icon,
   Table,
@@ -13,12 +13,14 @@ import {
   Tbody,
   Text,
   useBreakpointValue,
-} from "@chakra-ui/react";
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import Header from "../../components/Header";
-import { Pagination } from "../../components/Pagination";
-import { SideBar } from "../../components/SideBar";
-import Link from "next/link";
+  IconButton,
+} from '@chakra-ui/react';
+import { RiAddLine, RiEditLine } from 'react-icons/ri';
+import Link from 'next/link';
+
+import { Header } from '../../components/Header';
+import { Sidebar } from '../../components/Sidebar';
+import { Pagination } from '../../components/Pagination';
 
 export default function UserList() {
   const isWideVersion = useBreakpointValue({
@@ -29,64 +31,69 @@ export default function UserList() {
   return (
     <Box>
       <Header />
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <SideBar />
+
+      <Flex w="100%" my="6" maxW={1480} mx="auto" px="6">
+        <Sidebar />
+
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
-          <Flex mb="8" justify="space-between" align="center">
+          <Flex mb="8" justifyContent="space-between" alignItems="center">
             <Heading size="lg" fontWeight="normal">
-              Usuarios
+              Usuários
             </Heading>
+
             <Link href="/users/create" passHref>
               <Button
                 as="a"
                 size="sm"
                 fontSize="sm"
-                colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize="20px" />}
+                colorScheme="purple"
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
               >
-                Criar novo usuario
+                Novo
               </Button>
             </Link>
           </Flex>
+
           <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
-                <Th px={["4", "4", "6"]} color="gray.300">
-                  <Checkbox colorScheme="pink" />
+                <Th px={['4', '4', '6']} color="gray.300" w="8">
+                  <Checkbox colorScheme="purple" />
                 </Th>
-                <Th>Usuario</Th>
+                <Th>Usuário</Th>
                 {isWideVersion && <Th>Data de cadastro</Th>}
-                <Th w="8"></Th>
+                <Th textAlign="end"></Th>
               </Tr>
             </Thead>
+
             <Tbody>
               <Tr>
-                <Td px={["4", "4", "6"]}>
-                  <Checkbox colorScheme="pink" />
+                <Td px={['4', '4', '6']}>
+                  <Checkbox colorScheme="purple" />
                 </Td>
                 <Td>
                   <Box>
-                    <Text fontWeight="bold">Gian Antunes</Text>
+                    <Text fontWeight="bold">Gian Grassi</Text>
                     <Text fontSize="small" color="gray.300">
                       giangr21@gmail.com
                     </Text>
                   </Box>
                 </Td>
-                {isWideVersion && <Td>04 de abril, 2021</Td>}
-                <Td>
-                  <Button
+                {isWideVersion && <Td>04 de Abril de 2021</Td>}
+                <Td textAlign="end">
+                  <IconButton
+                    aria-label="Edit user"
                     as="a"
                     size="sm"
                     fontSize="sm"
                     colorScheme="purple"
-                    leftIcon={<Icon as={RiPencilLine} fontSize="16px" />}
-                  >
-                    {isWideVersion ? "Editar" : ""}
-                  </Button>
+                    icon={<Icon as={RiEditLine} fontSize="16" />}
+                  />
                 </Td>
               </Tr>
             </Tbody>
           </Table>
+
           <Pagination />
         </Box>
       </Flex>

@@ -1,47 +1,132 @@
 import {
   Box,
+  Divider,
   Flex,
   Heading,
-  Divider,
-  VStack,
-  SimpleGrid,
   HStack,
+  SimpleGrid,
+  VStack,
   Button,
-} from "@chakra-ui/react";
-import Header from "../../components/Header";
-import { Input } from "../../components/Form/Input";
-import { SideBar } from "../../components/SideBar";
-import Link from "next/link";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { Header } from '../../components/Header';
+import { Sidebar } from '../../components/Sidebar';
+import { Input } from '../../components/Form/Input';
+
+type CreateUserFormData = {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+};
+
+const createUserFormSchema = yup.object().shape({
+  name: yup.string().required('O nome é obrigatório'),
+  email: yup
+    .string()
+    .required('O e-mail é obrigatório')
+    .email('O e-mail precisa ser válido'),
+  password: yup
+    .string()
+    .required('A senha é obrigatória')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+  password_confirmation: yup
+    .string()
+    .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
+});
 
 export default function CreateUser() {
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(createUserFormSchema),
+  });
+
+  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (data) => {
+    await new Promise((res) => setTimeout(res, 2000));
+  };
+
   return (
     <Box>
       <Header />
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <SideBar />
-        <Box flex="1" borderRadius={8} bg="gray.800" p={["6", "8"]}>
+
+      <Flex w="100%" my="6" maxW={1480} mx="auto" px="6">
+        <Sidebar />
+
+        <Box
+          as="form"
+          flex="1"
+          borderRadius={8}
+          bg="gray.800"
+          p="8"
+          onSubmit={handleSubmit(handleCreateUser)}
+        >
           <Heading size="lg" fontWeight="normal">
-            Criar Usuario
+            Criar usuário
           </Heading>
+
           <Divider my="6" borderColor="gray.700" />
-          <VStack spacing={["6", "8"]}>
-            <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
-              <Input name="name" label="Nome Completo" />
-              <Input name="email" label="Email" />
+
+          <VStack spacing={['6', '8']}>
+            <SimpleGrid minChildWidth="240px" spacing={['6', '8']} width="100%">
+              <Input
+                name="name"
+                label="Nome
+                completo"
+                {...register('name')}
+                isDisabled={formState.isSubmitting}
+                error={formState.errors.name}
+              />
+              <Input
+                name="email"
+                type="email"
+                label="E-mail"
+                {...register('email')}
+                isDisabled={formState.isSubmitting}
+                error={formState.errors.email}
+              />
             </SimpleGrid>
-            <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
-              <Input name="password" label="Senha" />
-              <Input name="password" label="Confirmacao Senha" />
+
+            <SimpleGrid minChildWidth="240px" spacing={['6', '8']} width="100%">
+              <Input
+                name="password"
+                type="password"
+                label="Senha"
+                {...register('password')}
+                isDisabled={formState.isSubmitting}
+                error={formState.errors.password}
+              />
+              <Input
+                name="password_confirmation"
+                type="password"
+                label="Confirmação da senha"
+                {...register('password_confirmation')}
+                isDisabled={formState.isSubmitting}
+                error={formState.errors.password_confirmation}
+              />
             </SimpleGrid>
           </VStack>
-          <Flex mt="8" justify="flex-end">
+
+          <Flex mt="8" justifyContent="flex-end">
             <HStack spacing="4">
               <Link href="/users" passHref>
-                <Button as="a" colorScheme="whiteAlpha">
+                <Button
+                  as="a"
+                  colorScheme="whiteAlpha"
+                  disabled={formState.isSubmitting}
+                >
                   Cancelar
                 </Button>
               </Link>
-              <Button colorScheme="pink">Salvar</Button>
+              <Button
+                type="submit"
+                colorScheme="purple"
+                isLoading={formState.isSubmitting}
+              >
+                Salvar
+              </Button>
             </HStack>
           </Flex>
         </Box>

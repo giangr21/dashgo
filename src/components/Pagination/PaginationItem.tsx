@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button } from '@chakra-ui/react';
 
 interface PaginationItemProps {
   number: number;
@@ -13,27 +13,27 @@ export function PaginationItem({
     return (
       <Button
         size="sm"
-        fontSize="xs"
+        fontSize="xl"
         width="4"
-        colorScheme="pink"
+        colorScheme="purple"
         disabled
         _disabled={{
-          bg: "pink.500",
-          cursor: "default",
+          cursor: 'default',
         }}
       >
         {number}
       </Button>
     );
   }
+
   return (
     <Button
       size="sm"
-      fontSize="xs"
+      fontSize="xl"
       width="4"
-      bgColor="gray.700"
+      bg="gray.700"
       _hover={{
-        bg: "gray.500",
+        bg: 'gray.500',
       }}
     >
       {number}
